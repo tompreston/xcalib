@@ -532,6 +532,43 @@ read_vcgt_internal(const char * filename, u_int16_t * rRamp, u_int16_t * gRamp,
   return retVal;
 }
 
+struct drm_color_lut {
+	u_int16_t red;
+	u_int16_t green;
+	u_int16_t blue;
+	u_int16_t reserved;
+};
+
+static int
+read_lut(const char * filename, u_int16_t * rRamp, u_int16_t * gRamp,
+		u_int16_t * bRamp, unsigned int nEntries)
+{
+	const ssize_t csize = sizeof(struct drm_color_lut);
+	struct drm_color_lut colour_lut = { 0 };
+	int i, fd;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0) {
+		error("%s could not open %s\n", __func__, filename);
+		return fd;
+	}
+
+	for (i = 0; i < nEntries; i++) {
+		if (read(fd, &colour_lut, csize) < csize) {
+			error("%s could not read %s\n", __func__, filename);
+			close(fd);
+			return -1;
+		}
+
+		rRamp[i] = colour_lut.red;
+		gRamp[i] = colour_lut.green;
+		bRamp[i] = colour_lut.blue;
+	}
+
+	close(fd);
+	return nEntries;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1000,7 +1037,7 @@ main (int argc, char *argv[])
 
   if(!alter)
   {
-    if( (i = read_vcgt_internal(in_name, r_ramp, g_ramp, b_ramp, ramp_size)) <= 0) {
+    if( (i = read_lut(in_name, r_ramp, g_ramp, b_ramp, ramp_size)) <= 0) {
       if(i<0)
         warning ("Unable to read file '%s'", in_name);
       if(i == 0)
