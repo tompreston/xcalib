@@ -117,7 +117,7 @@ usage (void)
   fprintf (stdout, "Copyright (C) 2004-2007 Stefan Doehla <stefan AT doehla DOT de>\n");
   fprintf (stdout, "THIS PROGRAM COMES WITH ABSOLUTELY NO WARRANTY!\n");
   fprintf (stdout, "\n");
-  fprintf (stdout, "usage:  xcalib [-options] ICCPROFILE\n");
+  fprintf (stdout, "usage:  xcalib [-options] RAWLUT\n");
   fprintf (stdout, "     or xcalib [-options] -alter\n");
   fprintf (stdout, "\n");
   fprintf (stdout, "where the available options are:\n");
@@ -150,7 +150,7 @@ usage (void)
   fprintf (stdout, "    -version\n");
   fprintf (stdout, "\n");
   fprintf (stdout,
-	   "last parameter must be an ICC profile containing a vcgt-tag\n");
+	   "last parameter must be a RAW LUT blob\n");
   fprintf (stdout, "\n");
 #ifndef _WIN32 
   fprintf (stdout, "Example: ./xcalib -d :0 -s 0 -v bluish.icc\n");
